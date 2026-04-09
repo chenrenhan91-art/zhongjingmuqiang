@@ -1,0 +1,870 @@
+/* -----------------------------------------------------------
+   Global Variables & Base Reset
+   ----------------------------------------------------------- */
+:root {
+    --primary-color: #050510;
+    --accent-color: #0066cc;
+    --accent-hover: #004c99;
+    --text-light: #ffffff;
+    --text-muted: #ccd9e8;
+    --text-dark: #333333;
+    --text-gray: #666666;
+    --bg-light: #f8f9fa;
+    --bg-white: #ffffff;
+    --glass-border: rgba(255, 255, 255, 0.2);
+    --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth; /* Smooth scrolling for anchor links */
+}
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    background-color: var(--primary-color);
+    color: var(--text-dark);
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.6;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+}
+
+p {
+    margin-bottom: 1rem;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+    transition: var(--transition);
+}
+
+.container {
+    width: 100%;
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+.section {
+    padding: 6rem 0;
+    background-color: var(--bg-white);
+}
+
+.bg-light {
+    background-color: var(--bg-light);
+}
+
+.section-subtitle {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.85rem;
+    letter-spacing: 0.2em;
+    color: var(--accent-color);
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+}
+
+.section-title {
+    font-size: 2.5rem;
+    color: var(--primary-color);
+    margin-bottom: 1.5rem;
+    line-height: 1.2;
+}
+
+.section-header.center {
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto 4rem;
+}
+
+.header-desc {
+    color: var(--text-gray);
+    font-size: 1.1rem;
+}
+
+/* -----------------------------------------------------------
+   Navigation / Header
+   ----------------------------------------------------------- */
+.site-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    padding: 1.5rem 0;
+    transition: var(--transition);
+    background: transparent; /* transparent at top */
+}
+
+/* Class applied via JS when scrolled */
+.site-header.scrolled {
+    background: rgba(5, 5, 16, 0.95);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    padding: 1rem 0;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+}
+
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+.logo h1 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.5rem;
+    color: var(--text-light);
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.5); /* 防止顶部太亮 */
+}
+
+.logo span {
+    font-weight: 300;
+    color: #8bbceb;
+}
+
+.main-nav ul {
+    list-style: none;
+    display: flex;
+    gap: 2.5rem;
+}
+
+.main-nav a {
+    color: var(--text-light);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    position: relative;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.6); /* 防止文字泛白丢失 */
+}
+
+.main-nav a::after {
+    content: '';
+    position: absolute;
+    width: 0%;
+    height: 2px;
+    bottom: -5px;
+    left: 0;
+    background-color: var(--accent-color);
+    transition: var(--transition);
+}
+
+.main-nav a:hover::after {
+    width: 100%;
+}
+
+.btn-outline {
+    border: 1px solid var(--text-light);
+    color: var(--text-light);
+    padding: 0.6rem 1.5rem;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 600;
+}
+
+.btn-outline:hover {
+    background: var(--text-light);
+    color: var(--primary-color);
+}
+
+/* -----------------------------------------------------------
+   Hero Section (Retained interactive visual)
+   ----------------------------------------------------------- */
+.hero-section {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    min-height: 700px;
+    overflow: hidden;
+    perspective: 1000px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-light);
+}
+
+.bg-wrapper {
+    position: absolute;
+    top: -5%;
+    left: -5%;
+    width: 110%;
+    height: 110%;
+    transition: transform 0.1s cubic-bezier(0.2, 0.8, 0.4, 1);
+    transform-style: preserve-3d;
+}
+
+.bg-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    /* 调整亮度还原自然天光，增加少许对比度凸显通透感 */
+    filter: brightness(0.95) contrast(1.1) saturate(1.1);
+    z-index: 0; /* 修改为 0，让反光层居于其上 */
+}
+
+/* 新增：高度逼真的环境静态反射层与菲涅尔遮罩 (Environment Reflection & Fresnel Mask) */
+.reflection-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    /* 关键属性：将倒影固定（fixed），使得网格移动时倒影不跟着移动，产生完美的镜面错觉 */
+    background-attachment: fixed;
+    background-position: center;
+    z-index: 2; /* 调高层级为2 */
+    mix-blend-mode: screen; /* 与底侧图层进行明亮融合 */
+    opacity: 0.8; /* 天空倒影的强度 */
+    
+    /* 核心魔法：动态菲涅尔效应光罩 (interactive Fresnel effect)
+       在你视线正对（鼠标位置）处镂空成全透明（看透玻璃），在斜看处（鼠标周围边缘）呈现极强的不透明反射率 */
+    --mouse-x: 50%;
+    --mouse-y: 50%;
+    -webkit-mask-image: radial-gradient(circle 700px at var(--mouse-x) var(--mouse-y), transparent 15%, rgba(0,0,0,1) 85%);
+    mask-image: radial-gradient(circle 700px at var(--mouse-x) var(--mouse-y), transparent 15%, rgba(0,0,0,1) 85%);
+}
+
+.spotlight {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 1200px;
+    height: 1200px;
+    /* 强化的蓝天反光：增加深空蓝向四周扩散模拟广阔天空反射 */
+    background: radial-gradient(circle, rgba(160, 210, 255, 0.5) 0%, rgba(50, 130, 220, 0.25) 40%, rgba(20, 80, 150, 0) 70%);
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    z-index: 3; /* 层级提升以覆盖阴影和倒影层 */
+    mix-blend-mode: screen; /* 提亮底层，让蓝色更加明亮剔透 */
+    filter: blur(50px);
+}
+
+.glass-grid {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 4; /* 层级提升置顶前排文案之上 */
+    display: grid;
+    /* 模拟真实的金属幕墙框（Mullions），稍暗的深灰色铝合金质感，衬托蓝色玻璃 */
+    gap: 1.5px; 
+    border: 1px solid rgba(30, 40, 50, 0.6); 
+    background-color: rgba(30, 40, 50, 0.8);
+}
+
+.glass-panel {
+    /* 为配合底下的强反射云层倒影与菲涅尔遮罩，面板自身需调低饱和度变清透 */
+    background: linear-gradient(135deg, rgba(80, 150, 220, 0.15) 0%, rgba(20, 70, 130, 0.3) 100%);
+    backdrop-filter: blur(2px) brightness(0.95); /* 轻微模糊让菲涅尔和底图更融合 */
+    -webkit-backdrop-filter: blur(2px) brightness(0.95);
+    /* 加入 blur/brightness 平滑过渡属性，让透明度差异在闪烁时自然 */
+    transition: background 1.5s cubic-bezier(0.1, 0.7, 0.1, 1), box-shadow 1.5s ease-out, border 1.5s ease-out, backdrop-filter 1.5s ease-out, -webkit-backdrop-filter 1.5s ease-out;
+    
+    /* 优化 1：逼真的 3D 物理结构边框 (模拟受光面高光与背光面偏暗) */
+    border-top: 1px solid rgba(255, 255, 255, 0.25);
+    border-left: 1px solid rgba(255, 255, 255, 0.15);
+    border-right: 1px solid rgba(0, 0, 0, 0.3);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.5);
+    
+    /* 优化 2：多重内部阴影，模拟“中空玻璃(Double Glazing)”内部的深邃黑边绝缘层与切角折射 */
+    box-shadow: 
+        inset 0 0 0 1px rgba(0, 0, 0, 0.4),            /* 最外圈绝缘胶条黑边 */
+        inset 0 3px 20px rgba(180, 220, 255, 0.15),    /* 上方天空漫反射内向晕影 */
+        inset 0 -3px 15px rgba(0, 30, 80, 0.6);        /* 下方建筑背影的深邃投影 */
+}
+
+.glass-panel.lit {
+    transition: background 0s, box-shadow 0s, border 0s, backdrop-filter 0s, -webkit-backdrop-filter 0s;
+    /* 太阳光或环境光直射瞬间：蓝玻璃高度通透化，大面泛出亮蓝白色 */
+    background: linear-gradient(135deg, rgba(230, 245, 255, 0.7) 0%, rgba(100, 180, 250, 0.35) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    box-shadow: 
+        inset 0 0 50px rgba(255, 255, 255, 0.9), 
+        0 0 60px rgba(150, 210, 255, 0.6); /* 外部溢出海蓝色漫反射光辉 */
+    /* 受到强光照射时模糊消失、底层明度提高（彻底透亮穿透） */
+    backdrop-filter: blur(0px) brightness(1.2);
+    -webkit-backdrop-filter: blur(0px) brightness(1.2);
+}
+
+.hero-content {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    max-width: 900px;
+    padding: 0 2rem;
+    pointer-events: none; /* Allows cursor to interact with grid */
+}
+
+.hero-content .sub-headline {
+    font-size: 1rem;
+    letter-spacing: 0.4em;
+    color: #ffffff; 
+    text-transform: uppercase;
+    margin-bottom: 2rem;
+    font-weight: 600;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.6); /* 增加阴影保证亮空下的可读性 */
+    animation: fadeInDown 1s ease forwards;
+}
+
+.hero-content .main-headline {
+    font-family: 'Playfair Display', serif;
+    font-size: 5rem;
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: 0.02em;
+    margin-bottom: 1.5rem;
+    color: #ffffff; /* 移除暗色渐变，使用纯净白并辅以深阴影模拟强烈明暗对比 */
+    text-shadow: 0 10px 40px rgba(0,0,0,0.5), 0 2px 15px rgba(0,0,0,0.6);
+    animation: fadeInUp 1s ease forwards 0.3s;
+    opacity: 0;
+}
+
+.hero-content .description {
+    font-size: 1.25rem;
+    color: #ffffff;
+    font-weight: 500;
+    text-shadow: 0 4px 15px rgba(0,0,0,0.6); /* 白日模式下防字体丢失 */
+    margin-bottom: 3rem;
+    animation: fadeInUp 1s ease forwards 0.6s;
+    opacity: 0;
+}
+
+.cta-container {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    pointer-events: auto;
+    animation: fadeInUp 1s ease forwards 0.9s;
+    opacity: 0;
+}
+
+.btn-primary, .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem 2.5rem;
+    font-size: 0.95rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    font-weight: 600;
+    transition: var(--transition);
+}
+
+.btn-primary {
+    background-color: var(--accent-color);
+    color: var(--text-light);
+    border: 1px solid var(--accent-color);
+    box-shadow: 0 10px 20px rgba(0, 102, 204, 0.3);
+}
+
+.btn-primary:hover {
+    background-color: var(--accent-hover);
+    box-shadow: 0 15px 25px rgba(0, 102, 204, 0.4);
+    transform: translateY(-2px);
+}
+
+.btn-secondary {
+    background: rgba(0, 0, 0, 0.25);
+    color: var(--text-light);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+}
+
+.btn-secondary:hover {
+    background: rgba(255,255,255,0.15);
+    border-color: #fff;
+}
+
+.hero-trust {
+    position: absolute;
+    bottom: 3rem;
+    left: 0;
+    width: 100%;
+    z-index: 10;
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    color: rgba(255,255,255,0.9); /* 加亮颜色 */
+    text-shadow: 0 2px 10px rgba(0,0,0,0.6); /* 增强对比度 */
+    font-size: 0.95rem;
+    font-weight: 600;
+    pointer-events: none;
+    animation: fadeInUp 1s ease forwards 1.2s;
+    opacity: 0;
+}
+
+.hero-trust i {
+    color: #ffd700; /* 改为更温暖的日光金偏色 */
+    text-shadow: 0 0 10px rgba(0,0,0,0.4);
+    margin-right: 0.5rem;
+}
+
+/* -----------------------------------------------------------
+   Trust Bar
+   ----------------------------------------------------------- */
+.trust-bar {
+    background-color: var(--primary-color);
+    border-bottom: 1px solid #1a1a2e;
+    padding: 2.5rem 0;
+    text-align: center;
+}
+
+.trust-title {
+    font-size: 0.75rem;
+    color: var(--text-gray);
+    letter-spacing: 0.15em;
+    margin-bottom: 1.5rem;
+}
+
+.brand-grid {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 4rem;
+    opacity: 0.6;
+}
+
+.brand {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    color: #fff;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+/* -----------------------------------------------------------
+   Layout Structures (Split Layout)
+   ----------------------------------------------------------- */
+.split-layout {
+    display: flex;
+    align-items: center;
+    gap: 5rem;
+}
+
+.split-layout > div {
+    flex: 1;
+}
+
+/* -----------------------------------------------------------
+   About Section
+   ----------------------------------------------------------- */
+.about-section p {
+    color: var(--text-gray);
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+}
+
+.feature-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.feature-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.5rem;
+}
+
+.feature-item i {
+    font-size: 2rem;
+    color: var(--accent-color);
+    margin-top: 0.2rem;
+}
+
+.feature-item h4 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+    color: var(--primary-color);
+}
+
+.feature-item p {
+    font-size: 0.95rem;
+    margin-bottom: 0;
+}
+
+.about-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+}
+
+.stat-box {
+    background-color: var(--bg-light);
+    padding: 2.5rem;
+    border-radius: 8px;
+    border-left: 4px solid var(--accent-color);
+    transition: var(--transition);
+}
+
+.stat-box:hover {
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    transform: translateY(-5px);
+}
+
+.stat-number {
+    display: block;
+    font-size: 3rem;
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin-bottom: 0.5rem;
+    line-height: 1;
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    color: var(--text-gray);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* -----------------------------------------------------------
+   Services / Expertise Section
+   ----------------------------------------------------------- */
+.services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+}
+
+.service-card {
+    background-color: var(--bg-white);
+    padding: 3rem 2rem;
+    border-radius: 8px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+    transition: var(--transition);
+    border: 1px solid rgba(0,0,0,0.03);
+    text-align: center;
+}
+
+.service-card:hover {
+    box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+    transform: translateY(-10px);
+}
+
+.icon-wrapper {
+    width: 70px;
+    height: 70px;
+    background-color: rgba(0, 102, 204, 0.05);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+}
+
+.icon-wrapper i {
+    font-size: 2rem;
+    color: var(--accent-color);
+}
+
+.service-card h3 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+    color: var(--primary-color);
+}
+
+.service-card p {
+    color: var(--text-gray);
+    font-size: 0.95rem;
+}
+
+/* -----------------------------------------------------------
+   Banner CTA
+   ----------------------------------------------------------- */
+.banner-cta {
+    background: linear-gradient(135deg, var(--primary-color), #0a0a20);
+    color: var(--text-light);
+    padding: 5rem 0;
+    text-align: center;
+}
+
+.banner-cta h2 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.banner-cta p {
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    max-width: 700px;
+    margin: 0 auto 2.5rem;
+}
+
+/* -----------------------------------------------------------
+   Contact Form Section (Lead Gen Optimized)
+   ----------------------------------------------------------- */
+.contact-section {
+    background-color: var(--bg-white);
+}
+
+.contact-info p {
+    color: var(--text-gray);
+    margin-bottom: 3rem;
+}
+
+.contact-details {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.detail-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.5rem;
+}
+
+.detail-item i {
+    font-size: 1.5rem;
+    color: var(--accent-color);
+    margin-top: 0.2rem;
+}
+
+.detail-item p {
+    margin: 0;
+    color: var(--text-dark);
+}
+
+.detail-item a {
+    color: var(--accent-color);
+    font-weight: 500;
+}
+
+.contact-form-wrapper {
+    background-color: var(--bg-white);
+    padding: 3.5rem;
+    border-radius: 12px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.1);
+    border: 1px solid rgba(0,0,0,0.05);
+}
+
+.inquiry-form .form-row {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.inquiry-form .form-row .form-group {
+    flex: 1;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    margin-bottom: 0.5rem;
+}
+
+.form-group input, 
+.form-group select, 
+.form-group textarea {
+    width: 100%;
+    padding: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 0.95rem;
+    background-color: #fafafa;
+    transition: var(--transition);
+}
+
+.form-group input:focus, 
+.form-group select:focus, 
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    background-color: #fff;
+    box-shadow: 0 0 0 4px rgba(0, 102, 204, 0.1);
+}
+
+.btn-submit {
+    width: 100%;
+    padding: 1.25rem;
+    background-color: var(--primary-color);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.btn-submit:hover {
+    background-color: var(--accent-color);
+}
+
+.privacy-note {
+    font-size: 0.8rem;
+    color: #999;
+    text-align: center;
+    margin-top: 1rem;
+    margin-bottom: 0;
+}
+
+.privacy-note i {
+    margin-right: 0.3rem;
+}
+
+/* -----------------------------------------------------------
+   Footer
+   ----------------------------------------------------------- */
+.site-footer {
+    background-color: #030308;
+    color: var(--text-muted);
+    padding: 5rem 0 0 0;
+}
+
+.footer-content {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 4rem;
+    margin-bottom: 4rem;
+}
+
+.footer-brand h2 {
+    color: #fff;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.5rem;
+    letter-spacing: 2px;
+    margin-bottom: 1.5rem;
+}
+
+.footer-brand p {
+    max-width: 400px;
+    font-size: 0.95rem;
+}
+
+.footer-links h4 {
+    color: #fff;
+    font-family: 'Montserrat', sans-serif;
+    margin-bottom: 1.5rem;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+}
+
+.footer-links ul {
+    list-style: none;
+}
+
+.footer-links li {
+    margin-bottom: 0.8rem;
+}
+
+.footer-links a:hover {
+    color: var(--text-light);
+    padding-left: 5px;
+}
+
+.footer-bottom {
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding: 1.5rem 0;
+    text-align: center;
+    font-size: 0.85rem;
+}
+
+/* -----------------------------------------------------------
+   Floating Action Button (FAB)
+   ----------------------------------------------------------- */
+.fab-contact {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 60px;
+    height: 60px;
+    background-color: var(--accent-color);
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5rem;
+    box-shadow: 0 5px 20px rgba(0, 102, 204, 0.4);
+    z-index: 999;
+    transition: var(--transition);
+}
+
+.fab-contact:hover {
+    transform: scale(1.1);
+    background-color: var(--primary-color);
+}
+
+/* -----------------------------------------------------------
+   Animations & Responsive
+   ----------------------------------------------------------- */
+@keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(40px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 992px) {
+    .split-layout {
+        flex-direction: column;
+        gap: 3rem;
+    }
+    
+    .hero-content .main-headline { font-size: 3.5rem; }
+    .hero-content .description { font-size: 1.1rem; }
+    
+    .footer-content { grid-template-columns: 1fr; gap: 2rem; }
+}
+
+@media (max-width: 768px) {
+    .main-nav { display: none; } /* Could be upgraded to hamburger menu */
+    .hero-trust { display: none; }
+    .hero-content .main-headline { font-size: 2.8rem; }
+    .about-stats { grid-template-columns: 1fr; }
+    .inquiry-form .form-row { flex-direction: column; gap: 0; }
+    .contact-form-wrapper { padding: 2rem; }
+}

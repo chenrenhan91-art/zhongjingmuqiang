@@ -150,12 +150,21 @@ a {
 .brand-logo {
     width: 48px;
     height: 48px;
+    max-width: 48px;
+    max-height: 48px;
     object-fit: contain;
     opacity: 0.88;
     mix-blend-mode: screen;
     filter: brightness(1.15) contrast(1.05) drop-shadow(0 2px 10px rgba(0, 0, 0, 0.45));
     flex: 0 0 auto;
+    display: block;
     transform: translateY(1px);
+}
+
+/* Fallback guard to prevent oversized logo if stale styles/extensions interfere. */
+.site-header .logo .brand-logo {
+    width: clamp(34px, 2.8vw, 48px) !important;
+    height: clamp(34px, 2.8vw, 48px) !important;
 }
 
 .logo h1 {

@@ -1,5 +1,74 @@
 document.addEventListener('DOMContentLoaded', () => {
 
+    const navLinks = Array.from(document.querySelectorAll('.main-nav a'));
+    const revealTargets = Array.from(document.querySelectorAll('.section, .trust-bar, .banner-cta, .site-footer'));
+
+    revealTargets.forEach((element) => element.classList.add('reveal-section'));
+
+    const setActiveNavLink = (sectionId) => {
+        navLinks.forEach((link) => {
+            const isActive = link.getAttribute('href') === `#${sectionId}`;
+            link.classList.toggle('active', isActive);
+            if (isActive) {
+                link.setAttribute('aria-current', 'page');
+            } else {
+                link.removeAttribute('aria-current');
+            }
+        });
+    };
+
+    const sectionObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+
+            entry.target.classList.add('is-visible');
+
+            if (entry.target.id) {
+                setActiveNavLink(entry.target.id);
+            }
+        });
+    }, {
+        threshold: 0.28,
+        rootMargin: '0px 0px -12% 0px'
+    });
+
+    revealTargets.forEach((element) => sectionObserver.observe(element));
+
+    const heroSection = document.getElementById('hero');
+    if (heroSection) {
+        setActiveNavLink('hero');
+    }
+
+    const interactiveCards = Array.from(document.querySelectorAll('.service-card, .project-card, .stat-box'));
+    const canUseFinePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+    if (canUseFinePointer && interactiveCards.length > 0) {
+        interactiveCards.forEach((card) => {
+            card.addEventListener('pointermove', (event) => {
+                const rect = card.getBoundingClientRect();
+                const x = (event.clientX - rect.left) / rect.width;
+                const y = (event.clientY - rect.top) / rect.height;
+
+                const rotateY = (x - 0.5) * 8;
+                const rotateX = (0.5 - y) * 7;
+
+                card.style.setProperty('--mouse-x', `${(x * 100).toFixed(2)}%`);
+                card.style.setProperty('--mouse-y', `${(y * 100).toFixed(2)}%`);
+                card.style.setProperty('--card-rotate-x', `${rotateX.toFixed(2)}deg`);
+                card.style.setProperty('--card-rotate-y', `${rotateY.toFixed(2)}deg`);
+                card.classList.add('is-tilting');
+            });
+
+            card.addEventListener('pointerleave', () => {
+                card.style.setProperty('--card-rotate-x', '0deg');
+                card.style.setProperty('--card-rotate-y', '0deg');
+                card.style.setProperty('--mouse-x', '50%');
+                card.style.setProperty('--mouse-y', '50%');
+                card.classList.remove('is-tilting');
+            });
+        });
+    }
+
     /* -----------------------------------------------------------
        Header Scroll Effect
        ----------------------------------------------------------- */
